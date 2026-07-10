@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # DB 1: PostgreSQL für die Essens-Rezepte
+  recipe-db:
+    image: postgres:15-alpine
+    container_name: recipe_postgres
+    environment:
+      POSTGRES_USER: chef
+      POSTGRES_PASSWORD: mein_lokales_geheimnis_123
+      POSTGRES_DB: recipe_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_local_data:/var/lib/postgresql/data
+
+  # DB 2: MongoDB für die Cocktails
+  cocktail-db:
+    image: mongo:6-jammy
+    container_name: cocktail_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: bartender
+      MONGO_INITDB_ROOT_PASSWORD: mein_anderes_geheimnis_456
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_local_data:/data/db
+
+volumes:
+  postgres_local_data:
+  mongo_local_data:
+  

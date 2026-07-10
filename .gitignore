@@ -1,0 +1,14 @@
+# Abhängigkeiten
+node_modules/
+venv/
+.pnp
+.pnp.js
+
+# Umgebungsvariablen (Passwörter!)
+.env
+.env.local
+.env.production
+
+# Betriebssystem-Reste
+.DS_Store
+Thumbs.db
