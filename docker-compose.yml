@@ -13,6 +13,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_local_data:/var/lib/postgresql/data
+      - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/init.sql
 
   # DB 2: MongoDB für die Cocktails
   cocktail-db:
@@ -29,4 +30,3 @@ services:
 volumes:
   postgres_local_data:
   mongo_local_data:
-  
