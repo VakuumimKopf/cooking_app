@@ -1,6 +1,6 @@
 const express = require('express');
 const recipesRoutes = require('./routes/recipeRoutes');
-const errorHandler = require('./middlewares/errorHandler');
+const errorHandler = require('./middlewares/errorHandler'); 
 
 const app = express();
 
