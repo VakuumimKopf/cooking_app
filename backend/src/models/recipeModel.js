@@ -19,9 +19,10 @@ const getAllRecipes = async () => {
 const insertRecipe = async (recipeData) => {
   return await prisma.recipe.create({
     data: {
-      title: recipeData.title,
+      name: recipeData.name,
       ingredients: recipeData.ingredients,
-      steps: recipeData.steps
+      category: recipeData.category,
+      rating: recipeData.rating,
     }
   });
 };

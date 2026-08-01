@@ -13,14 +13,14 @@ const getRecipes = async (req, res, next) => {
 // 2. Ein neues Rezept erstellen
 const createRecipe = async (req, res, next) => {
   try {
-    const { title, ingredients, steps } = req.body;
+    const { name, ingredients, category, rating } = req.body;
 
     // Einfacher Sicherheits-Check
-    if (!title) {
+    if (!name) {
       return res.status(400).json({ error: 'Ein Rezept braucht mindestens einen Titel!' });
     }
 
-    const newRecipe = await recipeModel.insertRecipe({ title, ingredients, steps });
+    const newRecipe = await recipeModel.insertRecipe({ name, ingredients, category, rating});
     return res.status(201).json(newRecipe);
   } catch (error) {
     next(error);

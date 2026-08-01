@@ -17,10 +17,11 @@ datasource db {
 // Hier definieren wir deine Rezept-Tabelle als JavaScript-Schnittstelle
 model Recipe {
   id          Int      @id @default(autoincrement()) // SERIAL PRIMARY KEY
-  title       String   // VARCHAR
+  name        String   // VARCHAR
   ingredients String[] // Ein Array aus Texten (Postgres unterstützt das nativ!)
-  steps       String[]
+  category    String
   createdAt   DateTime @default(now()) // Automatischer Zeitstempel
+  rating      Float
 
   @@map("recipes") // Sorgt dafür, dass die Tabelle in der DB klein geschrieben "recipes" heißt
 }
