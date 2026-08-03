@@ -1,0 +1,26 @@
+@startchen cocktail_database
+skinparam linetype ortho
+
+entity COCKTAIL {
+    Cocktail_ID : INTEGER <<key>>
+    Name : STRING
+    Rating : FLOAT
+    Tastenodes : STRING
+}
+
+entity ITEMLIST {
+    Cocktail_ID : INTEGER <<key>>
+    Item_ID : INTEGER <<key>>
+    Amound : FLOAT
+    Format : STRING 
+}
+
+entity ITEM {
+    Item_ID : INTEGER <<key>>
+    Name : STRING 
+}
+
+COCKTAIL =1= ITEMLIST
+ITEM =N= ITEMLIST
+
+@endchen

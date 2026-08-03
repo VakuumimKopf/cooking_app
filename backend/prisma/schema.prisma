@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -14,14 +8,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Hier definieren wir deine Rezept-Tabelle als JavaScript-Schnittstelle
-model Recipe {
-  id          Int      @id @default(autoincrement()) // SERIAL PRIMARY KEY
-  name        String   // VARCHAR
-  ingredients String[] // Ein Array aus Texten (Postgres unterstützt das nativ!)
-  category    String
+model Cocktail {
+  id          Int      @id @default(autoincrement())
+  name        String
+  taste       String
   createdAt   DateTime @default(now()) // Automatischer Zeitstempel
   rating      Float
+  ingredients Itemlist[]
+}
 
-  @@map("recipes") // Sorgt dafür, dass die Tabelle in der DB klein geschrieben "recipes" heißt
+model Item {
+  id          Int      @id @default(autoincrement())
+  name        String
+  cocktails   Itemlist[]
+}
+
+model Itemlist {
+  cocktail    Cocktail @relation(fields: [cocktail_id], references: [id])
+  cocktail_id Int 
+  item        Item     @relation(fields: [item_id], references: [id])
+  item_id     Int
+
+  amount      String
+
+  @@id([cocktail_id, item_id])
 }
