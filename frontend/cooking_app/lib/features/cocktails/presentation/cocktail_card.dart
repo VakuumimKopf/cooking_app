@@ -44,7 +44,7 @@ class CocktailCard extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      cocktail.category,
+                      cocktail.taste,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.grey[600],
                           ),

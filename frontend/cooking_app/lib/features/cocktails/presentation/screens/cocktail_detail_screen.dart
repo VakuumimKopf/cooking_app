@@ -1,4 +1,5 @@
 import 'package:cooking_app/features/cocktails/domain/cocktail.dart';
+import 'package:cooking_app/features/cocktails/domain/ingredient.dart';
 import 'package:flutter/material.dart';
 
 class CocktailDetailScreen extends StatelessWidget{
@@ -21,7 +22,7 @@ class CocktailDetailScreen extends StatelessWidget{
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Chip(label: Text(cocktail.category)),
+                  Chip(label: Text(cocktail.taste)),
                   const SizedBox(height: 16),
 
                   Text(
@@ -36,7 +37,7 @@ class CocktailDetailScreen extends StatelessWidget{
                         children: [
                           const Icon(Icons.check, size: 18, color: Colors.green),
                           const SizedBox(width: 8),
-                          Text(item),
+                          Text('• ${item.amount.toString()} ${item.name}'),
                         ],
                       ),
                     ),

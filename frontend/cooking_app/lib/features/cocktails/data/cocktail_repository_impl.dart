@@ -9,7 +9,7 @@ class CocktailRepositoryImpl implements CocktailRepository {
   
   final String baseUrl;
 
-  CocktailRepositoryImpl({this.baseUrl = 'http://10.0.2.2:3000/api/recipes'});
+  CocktailRepositoryImpl({this.baseUrl = 'http://10.0.2.2:3000/api/cocktails'});
 
   @override
   Future<List<Cocktail>> fetchCocktails() async {

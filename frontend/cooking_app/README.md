@@ -1,17 +1,11 @@
-# cooking_app
+# Functionallity
 
-A new Flutter project.
+## Cocktail Screen
+- List of all current Cocktails
+- Button to refresh list 
+- Button to add a new cocktail -> send to cocktail_add_screen
+- Each Cocktail entry button -> send to cocktail_detail_screen
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Item Screen
+- List of all current Items
+- 

@@ -57,6 +57,7 @@ class _CocktailListScreenState extends State<CocktailListScreen> {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(onPressed: _controller.loadCocktails),
     );
   }
 }
