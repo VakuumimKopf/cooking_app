@@ -37,7 +37,19 @@ const createCocktail = async (req, res, next) => {
     }
 };
 
+const deleteCocktail = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const deletedCocktail = await cocktailModel.deleteCocktail(id);
+
+        return res.status(204).send();
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getCocktails,
-    createCocktail
+    createCocktail,
+    deleteCocktail,
 }

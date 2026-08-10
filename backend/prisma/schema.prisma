@@ -14,6 +14,7 @@ model Cocktail {
   taste       String
   createdAt   DateTime @default(now()) // Automatischer Zeitstempel
   rating      Float
+  deleted     Boolean  @default(false)
   ingredients Itemlist[]
 }
 

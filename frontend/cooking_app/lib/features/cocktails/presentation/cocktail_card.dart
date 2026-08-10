@@ -1,11 +1,17 @@
+import 'package:cooking_app/features/cocktails/data/cocktail_repository_impl.dart';
 import 'package:cooking_app/features/cocktails/presentation/screens/cocktail_detail_screen.dart';
 import 'package:flutter/material.dart';
 import '../domain/cocktail.dart';
 
 class CocktailCard extends StatelessWidget {
   final Cocktail cocktail;
+  final VoidCallback onDelete;
 
-  const CocktailCard({super.key, required this.cocktail});
+  const CocktailCard({
+    super.key, 
+    required this.cocktail,
+    required this.onDelete, 
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +20,7 @@ class CocktailCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          Navigator.push(
-            context, 
-            MaterialPageRoute(
-              builder: (context) => CocktailDetailScreen(cocktail: cocktail),
-            ),
-          );
-        },
+        onTap: onDelete,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(

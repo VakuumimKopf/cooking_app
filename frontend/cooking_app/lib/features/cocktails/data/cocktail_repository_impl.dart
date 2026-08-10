@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:cooking_app/features/cocktails/domain/create_cocktail_dto.dart';
 import 'package:http/http.dart' as http;
 
 import '../domain/cocktail.dart';
@@ -33,6 +35,60 @@ class CocktailRepositoryImpl implements CocktailRepository {
       }
     } catch (e) {
       throw Exception('Netzwerkfehler beim Laden der Cocktails: $e');
+    }
+  }
+
+  @override
+  Future<Cocktail> postCocktail(CreateCocktailDto dto) async {
+    final url = Uri.parse(baseUrl);
+
+    Map<String, dynamic> json = dto.toJson();
+
+    log("Cocktail wird geschickt an Backend: $json");
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode(dto.toJson()),
+      );
+
+      if (response.statusCode == 201) {
+        return Cocktail.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception('Server-Fehler Statuscode ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Netzwerkfehler beim Erstellen des Cocktails $e');
+    }
+  }
+
+  @override
+  Future<void> deleteCocktail(int id) async {
+    final url = Uri.parse('$baseUrl/$id');
+
+    log("Schicke Delete Befehl an $url");
+
+    try {
+      final response = await http
+          .delete(
+            url,
+            headers: {'Content-Type': 'application/json'},
+          );
+
+      log("Response Statuscode: ${response.statusCode}");
+
+      // Manche Backends antworten mit 200 (OK), manche mit 204 (No Content)
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        return;
+      } else {
+        throw Exception('Server-Fehler Statuscode ${response.statusCode}: ${response.body}');
+      }
+    } catch (e) {
+      log("Fehler beim Löschen: $e");
+      throw Exception('Netzwerkfehler beim Löschen des Cocktails: $e');
     }
   }
 }
