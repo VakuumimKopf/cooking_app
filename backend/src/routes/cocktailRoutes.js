@@ -9,8 +9,12 @@ router.get('/test', (req, res) => {
 
 router.get('/', cocktailController.getCocktails);
 
+router.get('/:id', cocktailController.getCocktailById);
+
 router.post('/', cocktailController.createCocktail);
 
 router.delete('/:id', cocktailController.deleteCocktail);
+
+router.put('/:id', cocktailController.putCocktail);
 
 module.exports = router;

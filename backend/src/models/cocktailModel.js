@@ -1,5 +1,6 @@
 const { connect } = require('../app');
 const prisma = require('../config/prisma');
+const { patchCocktail } = require('../controllers/cocktailController');
 
 const createCocktail = async (cocktailData) => {
   const { name, taste, rating, ingredients } = cocktailData;
@@ -50,16 +51,29 @@ const createCocktail = async (cocktailData) => {
 };
 
 const getAllCocktails = async () => {
-    return await prisma.Cocktail.findMany({
-        where: {
-            deleted: false
-        },
-        include: {
-            ingredients: {
-                include: { item: true}
-            }
-        }
-    });
+  return await prisma.Cocktail.findMany({
+    where: {
+      deleted: false
+    },
+    include: {
+      ingredients: {
+        include: { item: true }
+      }
+    }
+  });
+};
+
+const getCocktailById = async (id) => {
+  return await prisma.Cocktail.findFirst({
+    where: {
+      id: Number(id),
+    },
+    include: {
+      ingredients: {
+        include: { item: true }
+      }
+    }
+  })
 };
 
 const deleteCocktail = async (id) => {
@@ -73,8 +87,52 @@ const deleteCocktail = async (id) => {
     });
 };
 
+const updateCocktail = async (id, cocktailData) => {
+  const { name, taste, rating, ingredients } = cocktailData;
+
+  return await prisma.cocktail.update({
+    where: { 
+      id: Number(id) 
+    },
+    data: {
+      name,
+      taste,
+      rating: parseFloat(rating),
+      ingredients: {
+        // 1. Alte Verknüpfungen löschen
+        deleteMany: {},
+        // 2. Neue Verknüpfungen (oder neue Zutaten) anlegen
+        create: ingredients.map((ing) => {
+          const targetItemId = ing.itemId ?? ing.item_id ?? ing.id;
+
+          // Bestehende Zutat verknüpfen (ID vorhanden)
+          if (targetItemId) {
+            return {
+              amount: String(ing.amount),
+              item: { connect: { id: Number(targetItemId) } }
+            };
+          }
+
+          // Neue Zutat anlegen (keine ID vorhanden)
+          return {
+            amount: String(ing.amount),
+            item: { create: { name: ing.name } }
+          };
+        })
+      }
+    },
+    include: {
+      ingredients: {
+        include: { item: true }
+      }
+    }
+  });
+};
+
 module.exports = {
     createCocktail,
     getAllCocktails,
-    deleteCocktail
+    getCocktailById,
+    deleteCocktail,
+    updateCocktail,
 }

@@ -1,5 +1,6 @@
 import 'package:cooking_app/features/cocktails/data/cocktail_repository_impl.dart';
 import 'package:cooking_app/features/cocktails/data/ingredient_repository_impl.dart';
+import 'package:cooking_app/features/cocktails/domain/cocktail.dart';
 import 'package:cooking_app/features/cocktails/domain/create_cocktail_dto.dart';
 import 'package:flutter/material.dart';
 import '../../domain/ingredient.dart';
@@ -7,8 +8,9 @@ import '../../domain/ingredient.dart';
 class CocktailAddScreen extends StatefulWidget {
   final CocktailRepositoryImpl _cocktailRepository;
   final IngredientRepositoryImpl _ingredientRepository;
+  final Cocktail? _cocktail;
 
-  const CocktailAddScreen({super.key, required this._cocktailRepository, required this._ingredientRepository});
+  const CocktailAddScreen({super.key, required this._cocktailRepository, required this._ingredientRepository, this._cocktail});
 
   @override
   State<CocktailAddScreen> createState() => _CocktailAddScreenState();
@@ -30,12 +32,39 @@ class _CocktailAddScreenState extends State<CocktailAddScreen> {
 
   bool _isSubmitting = false;
 
+  bool get _isEditing => widget._cocktail != null;
+
   @override
   void initState() {
     super.initState();
     // Startet direkt mit einer leeren Zutaten-Zeile
     _addIngredientRow();
     _loadIngredients();
+    _initForm();
+  }
+
+  void _initForm() {
+    final cocktail = widget._cocktail;
+
+    if (cocktail != null) {
+
+      _nameController.text = cocktail.name;
+      _tasteController.text = cocktail.taste;
+      _ratingController.text = cocktail.rating.toString();
+
+      if (cocktail.ingredients.isNotEmpty) {
+        for (final ingredient in cocktail.ingredients) {
+          _ingredientControllers.add({
+            'amount': TextEditingController(text: ingredient.amount),
+            'name': TextEditingController(text: ingredient.name),
+          });
+        }
+      } else {
+        _addIngredientRow();
+      }
+    } else {
+      _addIngredientRow();
+    }
   }
 
   void _addIngredientRow() {
@@ -124,7 +153,14 @@ class _CocktailAddScreenState extends State<CocktailAddScreen> {
         ingredients: ingredients,
       );
 
-      await widget._cocktailRepository.postCocktail(newCocktailData);
+      if (_isEditing) {
+        await widget._cocktailRepository.updateCocktail(
+          newCocktailData, 
+          widget._cocktail!.id,
+        );
+      } else {
+        await widget._cocktailRepository.postCocktail(newCocktailData);
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -148,7 +184,7 @@ class _CocktailAddScreenState extends State<CocktailAddScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Neuen Cocktail erstellen'),
+        title: Text(_isEditing ? 'Cocktail bearbeiten' : 'Neuen Cocktail erstellen'),      
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -333,7 +369,11 @@ class _CocktailAddScreenState extends State<CocktailAddScreen> {
                       ? const CircularProgressIndicator(color: Colors.white)
                       : const Icon(Icons.save),
                   label: Text(
-                    _isSubmitting ? 'Speichert...' : 'Cocktail Speichern',
+                    _isSubmitting 
+                      ? 'Speichert...' 
+                      : (_isEditing
+                        ? 'Änderungen speichern'
+                        : 'Cocktail speichern'),
                     style: const TextStyle(fontSize: 16),
                   ),
                 ),
